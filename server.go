@@ -5,10 +5,11 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
+	"github.com/toddself/quaranzine/config"
 )
 
 var schema = `
-CREATE TABLE author (
+CREATE TABLE IF NOT EXISTS author (
 	name text,
 	email text,
 	token text,
@@ -31,4 +32,5 @@ func main() {
 
 	db.MustExec(schema)
 
+	config.Load()
 }

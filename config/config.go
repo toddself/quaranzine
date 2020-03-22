@@ -18,7 +18,7 @@ const (
 	Prod
 )
 
-var envFromString = map[string]Environment{
+var envFromString = map[string]Env{
 	"dev":         Dev,
 	"development": Dev,
 	"stage":       Stage,
@@ -48,15 +48,14 @@ type Config struct {
 		Port     string `json:"port,omitempty"`
 		Database string `json:"database"`
 	} `json:"database"`
-
 	OAuth struct {
-		Secret `json:"secret"`
-		ID     `json:"id"`
-	}
+		Secret string `json:"secret"`
+		ID     string `json:"id"`
+	} `json:"oauth"`
 	Environment string
 }
 
-func (c Config) Load() Config {
+func Load() Config {
 	env := envFromString[os.Getenv("GO_ENV")]
 	dir, err := os.Getwd()
 	if err != nil {
@@ -64,7 +63,7 @@ func (c Config) Load() Config {
 		os.Exit(1)
 	}
 
-	cfg_file := fmt.Sprintf("%v.json", env)
+	cfg_file := filepath.Join(dir, fmt.Sprintf("%v.json", env))
 	data, err := ioutil.ReadFile(cfg_file)
 	if err != nil {
 		log.Fatalln(err)
@@ -79,4 +78,5 @@ func (c Config) Load() Config {
 	}
 
 	fmt.Printf("%v", cfg)
+	return cfg
 }
