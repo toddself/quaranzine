@@ -1,36 +1,13 @@
 package main
 
 import (
-	"log"
-
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+	"fmt"
 	"github.com/toddself/quaranzine/config"
+	"github.com/toddself/quaranzine/db"
 )
-
-var schema = `
-CREATE TABLE IF NOT EXISTS author (
-	name text,
-	email text,
-	token text,
-	state text
-)
-`
-
-type Author struct {
-	Name  string `db:"name", json:"name"`
-	Email string `db:"email", json:"email"`
-	Token string `db:"token"`
-	State string `db:"state"`
-}
 
 func main() {
-	db, err := sqlx.Connect("postgres", "user=quaranzine dbname=quaranzine sslmode=disable")
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	db.MustExec(schema)
-
-	config.Load()
+	cfg := config.Load()
+	db := db.Initialize(&cfg)
+	fmt.Println("%v", db)
 }

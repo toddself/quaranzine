@@ -46,7 +46,7 @@ type Config struct {
 		Password string `json:"password,omitempty"`
 		Host     string `json:"host,omitempty"`
 		Port     string `json:"port,omitempty"`
-		Database string `json:"database"`
+		Dbname   string `json:"dbname"`
 	} `json:"database"`
 	OAuth struct {
 		Secret string `json:"secret"`
@@ -77,6 +77,5 @@ func Load() Config {
 		os.Exit(1)
 	}
 
-	fmt.Printf("%v", cfg)
 	return cfg
 }
